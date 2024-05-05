@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+    <record model="ir.actions.act_window" id="propriete_action">
+        <field name="name">Liste des bien existants</field>
+        <field name="res_model">propriete</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="context">{'search_default_ppd': 1}</field>
+    </record>
+
+
+    <!-- Display list of goods in kanban-->
+    <record model="ir.ui.view" id="estate_property_kanban_view">
+        <field name="name">estate_property.kanban</field>
+        <field name="model">propriete</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" default_group_by="property_type_id">
+                <field name="status"/>
+                <field name="property_type_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record">
+                                <div class="o_kanban_record_head">
+                                    <field name="name"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div t-if="record.status.raw_value == 'new'">
+                                        <span style="color: blue;">Prix demandé:</span>
+                                        <field name="expected_price"/>
+                                    </div>
+                                    <div t-elif="record.status.raw_value == 'offer_received'">
+                                        <span style="color: green;">Meilleure Offre:</span>
+                                        <field name="best_offer"/>
+                                    </div>
+                                    <div t-elif="record.status.raw_value == 'offer_accepted'">
+                                        <span style="color: orange;">Prix final de vente:</span>
+                                        <field name="best_offer"/>
+                                    </div>
+                                    <div t-elif="record.status.raw_value == 'sold'">
+                                        <span style="color: red;">Vendu pour:</span>
+                                        <field name="prix_vente_final"/>
+                                    </div>
+                                    <div t-else="">
+                                        <span>Vente annulée</span>
+                                    </div>
+                                    <div class="o_kanban_record_footer">
+                                        <field name="tags_ids" widget="many2many_tags"
+                                               options="{'color_field': 'color'}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Display the property itself-->
+    <record model="ir.ui.view" id="estate_property_action_form">
+        <field name="name">estate_property_form.form</field>
+        <field name="model">propriete</field>
+        <field name="arch" type="xml">
+            <form string="estate_property">
+                <separator/>
+                <div style="text-align: left;">
+                    <button name="action_sold" type="object" string="Vendre" icon="fa-check" class="oe_highlight"
+                            attrs="{'invisible': ['|',('status', '=', 'canceled'),('status', '=', 'sold')]}"/>
+                    <div style="width: 12px; display: inline-block;"></div>
+                    <button name="action_canceled" type="object" string="Annuler" icon="fa-times" class="oe_highlight"
+                            attrs="{'invisible': ['|',('status', '=', 'canceled'),('status', '=', 'sold')]}"/>
+                    </div>
+                <div style="text-align: right;">
+                    <field name="status" widget="statusbar" statusbar_visible="new,offer_received,offer_accepted,sold"/>
+                </div>
+
+                <sheet>
+                    <group>
+                        <separator/>
+                        <h1 class="text-center">
+                            <field name="name"/>
+                        </h1>
+                        <separator/>
+                        <field name="tags_ids" widget="many2many_tags"
+                               options="{'color_field': 'color'}" editable="bottom"/>
+                        <separator/>
+                        <group>
+                            <field name="property_type_id" widget="many2one" options="{'no_create': True}"/>
+                            <field name="postal_code"/>
+                            <field name="disponibility"/>
+                            <field name="post_date"/>
+                            <separator/>
+                            <field name="expected_price"/>
+                            <field name="best_offer"/>
+                            <field name="prix_vente_final"/>
+                        </group>
+                        <notebook>
+
+                            <page string="Description">
+                                <group>
+                                    <field name="description"/>
+                                </group>
+                            </page>
+
+                            <page string="Details">
+                                <group>
+                                    <field name="bedrooms"/>
+                                    <field name="bathrooms"/>
+                                    <field name="facades"/>
+                                    <field name="garage"/>
+                                    <field name="living_area"/>
+                                    <field name="garden"/>
+                                    <field name="garden_area" attrs="{'invisible': [('garden', '=', False)]}"/>
+                                    <field name="garden_orientation" attrs="{'invisible': [('garden', '=', False)]}"/>
+                                    <field name="total_area"/>
+                                    <field name="active"/>
+                                </group>
+                            </page>
+
+                            <page string="Offre Immobilière">
+                                <field name="offres_ids"
+                                       attrs="{'readonly': [('status', 'in', ['canceled', 'sold', 'offer_accepted'])]}">
+                                    <tree string="Property Offers"
+                                          decoration-danger="statusOffer == 'refused'"
+                                          decoration-success="statusOffer == 'accepted'"
+                                          editable="bottom">
+
+                                        <field name="property_status" invisible="1"/>
+                                        <field name="price"/>
+                                        <field name="partner_id"/>
+                                        <field name="validity"/>
+                                        <field name="date_deadline" optional="1"/>
+
+                                        <button name="action_yes" type="object" string="Yes" icon="fa-check"
+                                                class="oe_highlight"
+                                                attrs="{'invisible': [('property_status', 'in', ['canceled', 'sold'])]}"/>
+                                        <button name="action_no" type="object" string="No" icon="fa-times"
+                                                class="oe_highlight"
+                                                attrs="{'invisible': ['|',('property_status', '=', 'canceled'),('property_status', '=', 'sold')]}"/>
+                                        <field name="statusOffer" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Autre info">
+                                <group>
+                                    <field name="acheteur_id" widget="selection"/>
+                                    <field name="vendeur_id"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!--    Filtrage-->
+    <record model="ir.ui.view" id="estate_property_action_search">
+        <field name="name">estate_property_action.search</field>
+        <field name="model">propriete</field>
+        <field name="arch" type="xml">
+            <search string="estate_property">
+                <field name="name" string="TITRAAAA"/>
+                <field name="expected_price"/>
+                <field name="postal_code"/>
+                <field name="total_area"/>
+                <separator/>
+                <filter string="Active" name="active" context="{'active': True}"/>
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Garage" name="garage" domain="[('garden', '=', True)]"/>
+                <field string="Surface habitable" name="living_area" filter_domain="[('living_area', '>=', 100)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Code Postal Poto" name="postal_code"
+                            context="{'group_by':'postal_code', 'garage':True}"/>
+                </group>
+                <filter string="Proprièté disponible (Nouveau ou Offre recu" name="ppd"
+                        domain="['|',('status', '=', 'new'),  ('status', '=', 'offer_received')]"/>
+
+
+            </search>
+        </field>
+    </record>
+
+
+</odoo>
+

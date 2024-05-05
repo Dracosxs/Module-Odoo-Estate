@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+
+<odoo>
+
+    <record model="ir.actions.act_window" id="property_tags_action">
+        <field name="name">Liste des tags existants</field>
+        <field name="res_model">tags</field>
+        <field name="view_mode">kanban,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="estate_property_tags_view_kanban">
+        <field name="name">tags_form.widget</field>
+        <field name="model">tags</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="o_form_view">
+                        <div class="o_form_title">
+                            <h1 class="o_form_title_main">
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <div class="o_notebook">
+                            <div class="o_notebook_header">
+                                <ul class="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="https://www.resultance.eu/">TEST</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

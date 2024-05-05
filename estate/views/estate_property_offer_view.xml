@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--   Not Use -->
+<odoo>
+    <record model="ir.actions.act_window" id="property_offer">
+        <field name="name">Offre</field>
+        <field name="res_model">offer</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="property_offer_tree_view">
+        <field name="name">offer_tree</field>
+        <field name="model">offer</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="price"/>
+                <field name="statusOffer"/>
+                <field name="partner_id"/>
+                <field name="validity"/>
+                <field name="date_deadline"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+</odoo>
+
+
+
+
+

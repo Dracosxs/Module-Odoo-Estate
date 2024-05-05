@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <menuitem id="test_menu_root"
+              name="Gestion bien à vendre"
+    />
+
+    <menuitem id="test_first_level_menu"
+              name="Liste des bien"
+              parent="test_menu_root"
+    />
+
+    <menuitem id="test_second_level_menu"
+              name="Caractéristiques"
+              parent="test_menu_root"
+    />
+
+
+    <menuitem id="propriete_menu_action"
+              name="Liste des biens"
+              parent="test_first_level_menu"
+              action="propriete_action"
+    />
+
+    <menuitem id="propriete_type_menu_action"
+              name="Liste des types de biens"
+              parent="test_second_level_menu"
+              action="property_type_action"
+    />
+
+        <menuitem id="propriete_tags_menu_action"
+              name="Liste des tags de biens"
+              parent="test_second_level_menu"
+              action="property_tags_action"
+    />
+
+</odoo>
+
+

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.actions.act_window" id="property_type_action">
+        <field name="name">Liste de type de bien existants</field>
+        <field name="res_model">type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="estate_property_type_view_form">
+        <field name="name">type_form.form</field>
+        <field name="model">type</field>
+        <field name="arch" type="xml">
+            <form string="estate_property">
+
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <separator/>
+                    <button name="action_view_offers" type="object" string="Voir" icon="fa-eye">
+                        <field name="offer_count" widget="statinfo"/>
+                    </button>
+                    <field name="offer_count" invisible="1"/>
+
+                    <notebook>
+
+                        <page string="Proprieté">
+                            <field name="property_ids">
+                                <tree string="Liste_maisons" default_order="name desc" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="expected_price"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,4 @@
+C1,C2,C3,C4,C5,C6,C7,C8
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+estate_account.access_link,acces_access_link,estate_account.model_access_link,base.group_user,1,1,1,1
+estate_account.propriete,acces_propriete,estate_account.model_propriete,base.group_user,1,1,1,1
